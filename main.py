@@ -42,10 +42,10 @@ def generateBTCScreen():
   change7d = '{color}{value:+.1f}'.format(color=color7d, value=percent_change_7d)
   return TextFile('{wipeupwardin}{wipeupwardout}\x14DD{middle}%s{b16x12}{halfspace}$%s{nl}{7x6}{amber}BTC %sd %sw' % ( color24, '{:,d}'.format(btcprice), change24, change7d ), 'AC.nmg', drive='D')
 
-def main(texts):
+def main(ip="172.16.16.2" , port=9520 , texts=""):
 
     ser = socket(AF_INET, SOCK_STREAM)
-    addr = ("172.16.16.2", 9520)
+    addr = (ip, port)
 
     ser.connect(addr)
     files = []
@@ -76,9 +76,13 @@ def main(texts):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser();
+    parser.add_argument("--address", "-a", help="The IP address of the connected LED Sign", type=str ,required=True)
+    parser.add_argument("--port" , "-p" , help="The Port of the connected LED Sign" , type=int , required=False, default=9520)
     parser.add_argument("--text" , "-t", help="Show the given text", type=str, required=True, nargs="*")
-    parser.add_argument("--verbose" , help="Show debug messages", required=False, default=False)
+    parser.add_argument("--verbose","-v" , help="Show debug messages", required=False, default=False)
     args = parser.parse_args()
     verbosity = args.verbose
     texts = args.text
-    main(texts)
+    ip = args.address
+    port = args.port
+    main(ip=ip, port=port ,texts=texts)

@@ -1,3 +1,6 @@
 main.py.backup
 .vscode
 .DS_Store
+
+*.pyc
+*.backup
