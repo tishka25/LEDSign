@@ -927,6 +927,25 @@ table:
       m = Message
       return m.Header + m.BeginCommand + p.CommandCharacter + filename + bytes + m.Coda
  
+Symbols = {
+  '?':  0xC0,'?':  0xC1,
+  '?':  0xC2,'?':  0xC3,
+  '?':  0xC4,'E':  0xC5,
+  '?':  0xC6,'?':  0xC7,
+  '?':  0xC8,'?':  0xC9,
+  '?':  0xCA,'?':  0xCB,
+  '?':  0xCC,'?':  0xCD,
+  '?':  0xCE,'?':  0xCF,
+  '?':  0xD0,'?':  0xD1,
+  '?':  0xD2,'?':  0xD3,
+  '?':  0xD4,'?':  0xD5,
+  '?':  0xD6,'?':  0xD7,
+  '?':  0xD8,'?':  0xD9,
+  '?':  0xDA,'?':  0xDE,
+  '?':  0xDF,
+  '?':  0xE0, '?': 0xE1,
+  # '?':  0xE2 ,'?': 0xE3,'?':0xE4, '?':0xE5, '?':0xE6, '?':0xE7 ,'?': '?' '?' '?' '?' '?' '?' '?' '?' '?' '?' '?' '?' '?' '?' '?' '?' '?' '?' '?' '?'
+}
 #There's gotta be a better way than this...
 class Markup:
   Registry = {

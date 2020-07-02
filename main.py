@@ -1,14 +1,29 @@
 #!/usr/bin/env python
-from JetFileII import Message, TextFile , PictureFile, SEQUENTSYS
+from JetFileII import Message, TextFile , PictureFile, SEQUENTSYS, Symbols
 import time
 from socket import *
 import requests
 import json
 import sys
 import argparse
+from struct import *
+import io
 
 
 verbosity = False
+
+def replaceAllSymbols(text):
+  formated_data = []
+  for ch in text.decode("utf8"):
+  # for i in range(len(text)):
+    # ch = text[i]
+    print("Char: " + hex(ord(ch)))
+    # if ord(ch) > ord("}"):
+      
+    formated_data.append(ch)
+    
+  return "".join(formated_data)
+
 
 
 def generateTextScreen(text, name="AA.nmg"):
@@ -17,30 +32,11 @@ def generateTextScreen(text, name="AA.nmg"):
 def generateInfoScreen():
   return TextFile('{top}{center}{raindropsin}{red}Dali vali?{nl}{nl}NE', "AB.nmg", drive='E')
 
-def generateVali():
-   return TextFile("{top}{center}{amber}NE" , "AA.nmg", drive="E")
 
 
 def debug_print(str):
     if(verbosity):
         print(str)
-
-def generateBTCScreen():
-  r = requests.get('https://api.coinmarketcap.com/v2/ticker/1/')
-  r = requests.get('https://api.coindesk.com/v1/bpi/currentprice.json')
-  jsonObject = r.json()
-  btcprice = int(jsonObject["bpi"]["USD"]["rate_float"])
-  percent_change_24h = 0 #float(jsonObject["data"]["quotes"]["USD"]["percent_change_24h"])
-  percent_change_7d = 0 #float(jsonObject["data"]["quotes"]["USD"]["percent_change_7d"])
-  color24 = '{green}'
-  color7d = '{green}'
-  if percent_change_24h < 0 :
-    color24 = '{red}'
-  if percent_change_7d < 0 :
-    color7d = '{red}'
-  change24 = '{color}{value:+.1f}'.format(color=color24, value=percent_change_24h)
-  change7d = '{color}{value:+.1f}'.format(color=color7d, value=percent_change_7d)
-  return TextFile('{wipeupwardin}{wipeupwardout}\x14DD{middle}%s{b16x12}{halfspace}$%s{nl}{7x6}{amber}BTC %sd %sw' % ( color24, '{:,d}'.format(btcprice), change24, change7d ), 'AC.nmg', drive='D')
 
 def main(ip="172.16.16.2" , port=9520 , texts=""):
 
@@ -48,6 +44,12 @@ def main(ip="172.16.16.2" , port=9520 , texts=""):
     addr = (ip, port)
 
     ser.connect(addr)
+
+    # Turn Sign On
+    ser.send(Message.TurnSignOn())
+    time.sleep(0.2)
+    #
+
     files = []
     if True:
         for i in range(len(texts)):
@@ -78,11 +80,22 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser();
     parser.add_argument("--address", "-a", help="The IP address of the connected LED Sign", type=str ,required=True)
     parser.add_argument("--port" , "-p" , help="The Port of the connected LED Sign" , type=int , required=False, default=9520)
-    parser.add_argument("--text" , "-t", help="Show the given text", type=str, required=True, nargs="*")
+    parser.add_argument("--text" , "-t", help="Show the given text", type=str, required=False, nargs="*")
+    parser.add_argument("--file" , "-f" , help="Show text from the given file", type=str, required=False)
     parser.add_argument("--verbose","-v" , help="Show debug messages", required=False, default=False)
     args = parser.parse_args()
     verbosity = args.verbose
-    texts = args.text
+    texts = []
+    if(args.text):
+      texts = args.text
+    if(args.file):
+      file = io.open(args.file, "rU", encoding="utf8") 
+      file_content = file.read().encode("utf8")
+      # file_content = replaceAllSymbols(file_content)
+      # print(file_content)
+      texts = [file_content]
     ip = args.address
     port = args.port
+    # main(ip=ip, port=port ,texts=[Symbols['?']])
+    print(texts)
     main(ip=ip, port=port ,texts=texts)
