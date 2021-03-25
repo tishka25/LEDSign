@@ -17,7 +17,7 @@ JetFileII==0.0.1
 pathlib2==2.3.5
 pipenv==2020.6.2
 pyserial==3.4
-PyYAML==5.3.1
+PyYAML==5.4
 requests==2.24.0
 RPi.GPIO==0.7.0
 scandir==1.10.0
