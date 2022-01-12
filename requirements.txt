@@ -15,7 +15,7 @@ importlib-resources==2.0.1
 iso8601==0.1.12
 JetFileII==0.0.1
 pathlib2==2.3.5
-pipenv==2020.6.2
+pipenv==2022.1.8
 pyserial==3.4
 PyYAML==5.3.1
 requests==2.24.0
